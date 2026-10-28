@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Bracket Checker</title>
+  <style>
+    * { box-sizing: border-box; }
+    body { margin: 0; font-family: system-ui, sans-serif; background: #f2f5fa; color: #17243a; }
+    main { max-width: 650px; margin: 8vh auto; padding: 2rem; background: white; border-radius: 16px; box-shadow: 0 10px 35px #182d4b1a; }
+    h1 { margin-top: 0; }
+    p { line-height: 1.6; }
+    label { display: block; font-weight: 600; margin-bottom: .5rem; }
+    textarea { width: 100%; min-height: 150px; padding: .75rem; border: 1px solid #9aa9bd; border-radius: 8px; font: inherit; resize: vertical; }
+    button { margin-top: 1rem; padding: .75rem 1.2rem; border: 0; border-radius: 8px; background: #2456c4; color: white; font: inherit; font-weight: 600; cursor: pointer; }
+    button:hover { background: #193f98; }
+    button:focus-visible, textarea:focus-visible { outline: 3px solid #82aaff; outline-offset: 2px; }
+    #result { margin-top: 1rem; font-weight: 600; }
+    @media (max-width: 700px) { main { margin: 1rem; padding: 1.5rem; } }
+  </style>
+</head>
+<body>
+  <main>
+    <h1>Bracket Checker</h1>
+    <p>Enter an expression to check whether its parentheses <code>()</code>, square brackets <code>[]</code>, and braces <code>{}</code> are matched and nested correctly.</p>
+    <form id="checker">
+      <label for="expression">Expression</label>
+      <textarea id="expression" placeholder="For example: {[()]}"></textarea>
+      <button type="submit">Check brackets</button>
+    </form>
+    <p id="result" role="status" aria-live="polite"></p>
+    <p><small>All other characters are ignored, including brackets inside quoted text or comments.</small></p>
+  </main>
+  <script>
+    function isBalanced(text) {
+      const stack = [];
+      const pairs = { ')': '(', ']': '[', '}': '{' };
+      for (const character of text) {
+        if (character === '(' || character === '[' || character === '{') {
+          stack.push(character);
+        } else if (Object.hasOwn(pairs, character)) {
+          if (stack.pop() !== pairs[character]) return false;
+        }
+      }
+      return stack.length === 0;
+    }
+    document.getElementById('checker').addEventListener('submit', function (event) {
+      event.preventDefault();
+      const text = document.getElementById('expression').value;
+      document.getElementById('result').textContent = isBalanced(text)
+        ? 'The brackets are balanced.'
+        : 'The brackets are not balanced.';
+    });
+  </script>
+</body>
+</html>
